@@ -12,6 +12,10 @@ public class RandomFillStrategy implements CarFillStrategy {
 
     @Override
     public List<Car> fill(int count) {
+        if (count < 0) {
+            throw new IllegalArgumentException("Количество не может быть отрицательным!");
+        }
+
         List<Car> cars = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {

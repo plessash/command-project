@@ -1,12 +1,14 @@
 package ru.aston.model;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,7 +25,20 @@ public class FileFillStrategy implements CarFillStrategy {
 
     @Override
     public List<Car> fill(int count) {
-        Path path = Paths.get(fileName);
+        if (count < 0) {
+            throw new IllegalArgumentException("Количество не может быть отрицательным!");
+        }
+
+        Path path;
+        try {
+            if (fileName == null || fileName.isBlank()) {
+                return new ArrayList<>();
+            }
+            path = Paths.get(fileName);
+        } catch (InvalidPathException e) {
+            System.err.println("Некорректный путь к файлу: " + fileName);
+            return new ArrayList<>();
+        }
 
         if (!Files.exists(path)) {
             System.err.println("Файл " + fileName + " не найден!");
@@ -44,8 +59,8 @@ public class FileFillStrategy implements CarFillStrategy {
                             .year(raw.year)
                             .build())
                     .toList();
-        } catch (IOException e) {
-            System.err.println("Ошибка чтения файла: " + e.getMessage());
+        } catch (IOException | JsonSyntaxException e) {
+            System.err.println("Ошибка чтения/обработки файла: " + e.getMessage());
             return new ArrayList<>();
         }
     }
