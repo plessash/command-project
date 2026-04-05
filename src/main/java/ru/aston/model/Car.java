@@ -8,9 +8,15 @@ public class Car {
     private final int power;
     private final int year;
 
-    public static final Comparator<Car> byModel = Comparator.comparing(Car::getModel);
-    public static final Comparator<Car> byPower = Comparator.comparingInt(Car::getPower);
-    public static final Comparator<Car> byYear = Comparator.comparingInt(Car::getYear);
+    public static final Comparator<Car> BY_MODEL = Comparator.comparing(Car::getModel);
+    public static final Comparator<Car> BY_POWER = Comparator.comparingInt(Car::getPower);
+    public static final Comparator<Car> BY_YEAR = Comparator.comparingInt(Car::getYear);
+
+    public Car(String model, int power, int year) {
+        this.model = model;
+        this.power = power;
+        this.year = year;
+    }
 
     public String getModel() {
         return model;
@@ -45,14 +51,11 @@ public class Car {
         return Objects.hash(model, power, year);
     }
 
-    public Car (CarBuilder builder){
-        this.model = builder.model;
-        this.power = builder.power;
-        this.year = builder.year;
-    }
-
     public static CarBuilder builder() {
         return new CarBuilder();
+    }
+    public Car(CarBuilder builder) {
+        this(builder.model, builder.power, builder.year);
     }
 
     public static class CarBuilder {

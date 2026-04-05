@@ -1,4 +1,8 @@
-package ru.aston.model;
+package ru.aston.service.strategy.impl;
+
+import ru.aston.model.Car;
+import ru.aston.service.strategy.CarFillStrategy;
+import ru.aston.util.CarValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +13,7 @@ public class ManualFillStrategy implements CarFillStrategy {
 
     @Override
     public List<Car> fill(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("Количество не может быть отрицательным!");
-        }
+        CarValidator.validateCount(count);
 
         List<Car> cars = new ArrayList<>();
 

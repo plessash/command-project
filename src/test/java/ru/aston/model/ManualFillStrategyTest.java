@@ -2,6 +2,7 @@ package ru.aston.model;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import ru.aston.service.strategy.impl.ManualFillStrategy;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
