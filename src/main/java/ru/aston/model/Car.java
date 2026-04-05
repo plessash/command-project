@@ -1,4 +1,4 @@
-package ru.aston;
+package ru.aston.model;
 
 import java.util.Comparator;
 import java.util.Objects;
