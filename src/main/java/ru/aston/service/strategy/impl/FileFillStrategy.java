@@ -1,8 +1,11 @@
-package ru.aston.model;
+package ru.aston.service.strategy.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import ru.aston.model.Car;
+import ru.aston.service.strategy.CarFillStrategy;
+import ru.aston.util.CarValidator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,9 +28,7 @@ public class FileFillStrategy implements CarFillStrategy {
 
     @Override
     public List<Car> fill(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("Количество не может быть отрицательным!");
-        }
+        CarValidator.validateCount(count);
 
         Path path;
         try {

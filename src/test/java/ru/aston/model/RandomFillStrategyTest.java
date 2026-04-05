@@ -1,6 +1,7 @@
 package ru.aston.model;
 
 import org.junit.jupiter.api.Test;
+import ru.aston.service.strategy.impl.RandomFillStrategy;
 
 import java.util.List;
 

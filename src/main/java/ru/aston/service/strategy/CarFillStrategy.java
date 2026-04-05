@@ -1,4 +1,6 @@
-package ru.aston.model;
+package ru.aston.service.strategy;
+
+import ru.aston.model.Car;
 
 import java.util.List;
 
