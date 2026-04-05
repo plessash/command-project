@@ -1,4 +1,4 @@
-package ru.aston.model;
+package ru.aston.repository;
 
 import java.util.Map;
 

@@ -66,8 +66,8 @@ public class FileFillStrategy implements CarFillStrategy {
     }
 
     private static class CarRawData {
-        String model;
-        int power;
-        int year;
+        private String model;
+        private int power;
+        private int year;
     }
 }

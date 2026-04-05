@@ -5,7 +5,7 @@ public class Car {
     private final int power;
     private final int year;
 
-    public Car(CarBuilder builder) {
+    private Car(CarBuilder builder) {
         this.model = builder.model;
         this.power = builder.power;
         this.year = builder.year;
