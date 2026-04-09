@@ -9,6 +9,11 @@ import java.util.Comparator;
 
 public class CarManager {
     private CarFillStrategy strategy;
+    private SortStrategy<Car> sortStrategy;
+
+    public void setSortStrategy(SortStrategy<Car> sortStrategy) {
+        this.sortStrategy = sortStrategy;
+    }
 
     public void setStrategy(CarFillStrategy strategy) {
         this.strategy = strategy;
@@ -19,8 +24,8 @@ public class CarManager {
         return strategy.fill(count);
     }
 
-    public void sortCars(List<Car> cars, SortStrategy<Car> strategy, Comparator<Car> comparator) {
-        if (strategy == null) throw new IllegalStateException("Стратегия сортировки не выбрана!");
-        strategy.sort(cars, comparator);
+    public void sortCars(List<Car> cars, Comparator<Car> comparator) {
+        if (sortStrategy == null) throw new IllegalStateException("Стратегия сортировки не выбрана!");
+        sortStrategy.sort(cars, comparator);
     }
 }

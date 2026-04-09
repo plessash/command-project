@@ -121,29 +121,13 @@ public class ConsoleService {
             }
         }
     }
-//    private SortStrategy<Car> chooseSortStrategy() {
-//        System.out.println();
-//        System.out.println("Выберите алгоритм сортировки:");
-//        System.out.println("1. ");
-//        System.out.println("2. ");
-//        System.out.println("3. ");
-//        System.out.print("Ваш выбор: ");
-//
-//        String choice = scanner.nextLine().trim();
-//
-//        return switch (choice) {
-//            case "1" -> null;
-//            case "2" -> null;
-//            case "3" -> null;
-//            default -> throw new IllegalArgumentException("Некорректный алгоритм сортировки.");
-//        };
-//    }
 
     private void handleSortWorkflow(List<Car> cars) {
         SortStrategy<Car> strategy = chooseSortStrategy();
         Comparator<Car> comparator = chooseComparator();
 
-        carManager.sortCars(cars, strategy, comparator);
+        carManager.setSortStrategy(strategy);
+        carManager.sortCars(cars, comparator);
 
         System.out.println("\nОтсортированная коллекция:");
         printCars(cars);
