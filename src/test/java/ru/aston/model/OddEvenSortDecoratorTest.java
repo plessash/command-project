@@ -1,122 +1,110 @@
 package ru.aston.model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.aston.service.strategy.SortStrategy;
 import ru.aston.service.strategy.impl.BubbleSortStrategy;
-import ru.aston.service.strategy.impl.OddEvenSortDecorator;
+import ru.aston.service.strategy.impl.EvenFieldSortDecorator;
+import ru.aston.service.strategy.impl.InsertionSortStrategy;
+import ru.aston.service.strategy.impl.SelectionSortStrategy;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class OddEvenSortDecoratorTest {
+class EvenFieldSortDecoratorTest {
 
-    private List<Car> cars;
-    private OddEvenSortDecorator<Car> decoratorByPower;
-    private OddEvenSortDecorator<Car> decoratorByYear;
+    @Test
+    void sort_shouldSortOnlyCarsWithEvenPower() {
+        SortStrategy<Car> delegate = new BubbleSortStrategy<>();
+        EvenFieldSortDecorator<Car> strategy =
+                new EvenFieldSortDecorator<>(delegate, Car::getPower);
 
-    @BeforeEach
-    void setUp() {
-        cars = new ArrayList<>();
-        cars.add(new Car("BMW", 625, 2021));
-        cars.add(new Car("Audi", 472, 2020));
-        cars.add(new Car("Lexus", 650, 2023));
-        cars.add(new Car("Porsche", 598, 2022));
-        cars.add(new Car("Mercedes", 501, 2024));
+        List<Car> cars = new ArrayList<>(List.of(
+                Car.builder().model("A").power(101).year(2020).build(),
+                Car.builder().model("B").power(200).year(2018).build(),
+                Car.builder().model("C").power(103).year(2019).build(),
+                Car.builder().model("D").power(150).year(2022).build(),
+                Car.builder().model("E").power(105).year(2021).build()
+        ));
 
-        decoratorByPower = new OddEvenSortDecorator<>(
-                new BubbleSortStrategy<>(),
-                Car::getPower,
-                Comparator.comparingInt(Car::getPower)
+        strategy.sort(cars, Car.BY_POWER);
+
+        assertEquals("A", cars.get(0).getModel());
+        assertEquals("D", cars.get(1).getModel());
+        assertEquals("C", cars.get(2).getModel());
+        assertEquals("B", cars.get(3).getModel());
+        assertEquals("E", cars.get(4).getModel());
+    }
+
+    @Test
+    void sort_shouldSortOnlyCarsWithEvenYear() {
+        SortStrategy<Car> delegate = new InsertionSortStrategy<>();
+        EvenFieldSortDecorator<Car> strategy =
+                new EvenFieldSortDecorator<>(delegate, Car::getYear);
+
+        List<Car> cars = new ArrayList<>(List.of(
+                Car.builder().model("A").power(180).year(2021).build(),
+                Car.builder().model("B").power(220).year(2020).build(),
+                Car.builder().model("C").power(160).year(2019).build(),
+                Car.builder().model("D").power(140).year(2018).build()
+        ));
+
+        strategy.sort(cars, Car.BY_YEAR);
+
+        assertEquals("A", cars.get(0).getModel());
+        assertEquals("D", cars.get(1).getModel());
+        assertEquals("C", cars.get(2).getModel());
+        assertEquals("B", cars.get(3).getModel());
+    }
+
+    @Test
+    void sort_shouldKeepListUnchanged_whenNoEvenFieldValues() {
+        SortStrategy<Car> delegate = new SelectionSortStrategy<>();
+        EvenFieldSortDecorator<Car> strategy =
+                new EvenFieldSortDecorator<>(delegate, Car::getPower);
+
+        List<Car> cars = new ArrayList<>(List.of(
+                Car.builder().model("A").power(101).year(2021).build(),
+                Car.builder().model("B").power(103).year(2019).build(),
+                Car.builder().model("C").power(105).year(2017).build()
+        ));
+
+        strategy.sort(cars, Car.BY_POWER);
+
+        assertEquals("A", cars.get(0).getModel());
+        assertEquals("B", cars.get(1).getModel());
+        assertEquals("C", cars.get(2).getModel());
+    }
+
+    @Test
+    void sort_shouldSortAllElements_whenAllFieldValuesAreEven() {
+        SortStrategy<Car> delegate = new BubbleSortStrategy<>();
+        EvenFieldSortDecorator<Car> strategy =
+                new EvenFieldSortDecorator<>(delegate, Car::getPower);
+
+        List<Car> cars = new ArrayList<>(List.of(
+                Car.builder().model("A").power(200).year(2020).build(),
+                Car.builder().model("B").power(100).year(2018).build(),
+                Car.builder().model("C").power(300).year(2022).build()
+        ));
+
+        strategy.sort(cars, Car.BY_POWER);
+
+        assertEquals("B", cars.get(0).getModel());
+        assertEquals("A", cars.get(1).getModel());
+        assertEquals("C", cars.get(2).getModel());
+    }
+
+    @Test
+    void getName_shouldReturnExpectedName() {
+        SortStrategy<Car> delegate = new BubbleSortStrategy<>();
+        EvenFieldSortDecorator<Car> strategy =
+                new EvenFieldSortDecorator<>(delegate, Car::getPower);
+
+        assertEquals(
+                "Сортировка элементов с четным значением (Пузырьковая сортировка)",
+                strategy.getName()
         );
-
-        decoratorByYear = new OddEvenSortDecorator<>(
-                new BubbleSortStrategy<>(),
-                Car::getYear,
-                Comparator.comparingInt(Car::getYear)
-        );
-    }
-
-    @Test
-    void testOddEvenSortByPower() {
-        Car bmw = cars.get(0);
-        Car mercedes = cars.get(4);
-
-        decoratorByPower.sort(cars, Comparator.comparingInt(Car::getPower));
-
-        assertEquals(bmw, cars.get(0), "BMW (625, нечет) должен остаться на индексе 0");
-        assertEquals(mercedes, cars.get(4), "Mercedes (501, нечет) должен остаться на индексе 4");
-
-        List<Car> evenPowerCars = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.getPower() % 2 == 0) {
-                evenPowerCars.add(car);
-            }
-        }
-
-        for (int i = 0; i < evenPowerCars.size() - 1; i++) {
-            assertTrue(evenPowerCars.get(i).getPower() <= evenPowerCars.get(i + 1).getPower(),
-                    "Четные мощности должны быть отсортированы");
-        }
-    }
-
-    @Test
-    void testOddEvenSortByYear() {
-        Car bmw = cars.get(0);
-        Car lexus = cars.get(2);
-
-        decoratorByYear.sort(cars, Comparator.comparingInt(Car::getYear));
-
-        assertEquals(bmw, cars.get(0), "BMW (2021, нечет) должен остаться на индексе 0");
-        assertEquals(lexus, cars.get(2), "Lexus (2023, нечет) должен остаться на индексе 2");
-
-        List<Car> evenYearCars = new ArrayList<>();
-        for (Car car : cars) {
-            if (car.getYear() % 2 == 0) {
-                evenYearCars.add(car);
-            }
-        }
-
-        for (int i = 0; i < evenYearCars.size() - 1; i++) {
-            assertTrue(evenYearCars.get(i).getYear() <= evenYearCars.get(i + 1).getYear(),
-                    "Четные года должны быть отсортированы");
-        }
-    }
-
-    @Test
-    void testEmptyList() {
-        List<Car> emptyList = new ArrayList<>();
-        decoratorByPower.sort(emptyList, Comparator.comparingInt(Car::getPower));
-        assertTrue(emptyList.isEmpty());
-    }
-
-    @Test
-    void testAllOddValues() {
-        List<Car> oddCars = new ArrayList<>();
-        oddCars.add(new Car("Car1", 101, 2021));
-        oddCars.add(new Car("Car2", 103, 2023));
-        oddCars.add(new Car("Car3", 105, 2025));
-
-        List<Car> original = new ArrayList<>(oddCars);
-        decoratorByPower.sort(oddCars, Comparator.comparingInt(Car::getPower));
-
-        assertEquals(original, oddCars, "Если все значения нечетные, порядок не меняется");
-    }
-
-    @Test
-    void testAllEvenValues() {
-        List<Car> evenCars = new ArrayList<>();
-        evenCars.add(new Car("Car3", 300, 2022));
-        evenCars.add(new Car("Car1", 100, 2020));
-        evenCars.add(new Car("Car2", 200, 2024));
-
-        decoratorByPower.sort(evenCars, Comparator.comparingInt(Car::getPower));
-
-        for (int i = 0; i < evenCars.size() - 1; i++) {
-            assertTrue(evenCars.get(i).getPower() <= evenCars.get(i + 1).getPower(),
-                    "Если все значения четные, список полностью сортируется");
-        }
     }
 }
