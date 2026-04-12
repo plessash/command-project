@@ -5,9 +5,14 @@ import ru.aston.service.strategy.impl.FileFillStrategy;
 import ru.aston.service.strategy.impl.ManualFillStrategy;
 import ru.aston.service.strategy.impl.RandomFillStrategy;
 import ru.aston.service.strategy.SortStrategy;
+import ru.aston.service.strategy.impl.OddEvenSortDecorator;
+import ru.aston.service.strategy.impl.BubbleSortStrategy;
+import ru.aston.service.strategy.impl.InsertionSortStrategy;
+import ru.aston.service.strategy.impl.SelectionSortStrategy;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.Comparator;
 
 public class ConsoleService {
     private final Scanner scanner = new Scanner(System.in);
@@ -56,6 +61,11 @@ public class ConsoleService {
             System.out.println();
             System.out.println("Сформированная коллекция:");
             printCars(cars);
+            System.out.println();
+            String sortChoice = askYesNo("Хотите отсортировать коллекцию? (1 - Да / 2 - Нет): ");
+            if ("1".equals(sortChoice)) {
+                handleSortWorkflow(cars);
+            }
 
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println("Ошибка: " + e.getMessage());
@@ -111,21 +121,68 @@ public class ConsoleService {
             }
         }
     }
+
+    private void handleSortWorkflow(List<Car> cars) {
+        SortStrategy<Car> strategy = chooseSortStrategy();
+        Comparator<Car> comparator = chooseComparator();
+
+        carManager.setSortStrategy(strategy);
+        carManager.sortCars(cars, comparator);
+
+        System.out.println("\nОтсортированная коллекция:");
+        printCars(cars);
+    }
+
     private SortStrategy<Car> chooseSortStrategy() {
-        System.out.println();
-        System.out.println("Выберите алгоритм сортировки:");
-        System.out.println("1. ");
-        System.out.println("2. ");
-        System.out.println("3. ");
+        System.out.println("\nВыберите алгоритм сортировки:");
+        System.out.println("1. Пузырьковая (обычная)");
+        System.out.println("2. Пузырьковая (четная-нечетная по мощности)");
+        System.out.println("3. Пузырьковая (четная-нечетная по году)");
+        System.out.println("4. Сортировка вставками (обычная)");
+        System.out.println("5. Сортировка вставками (четная-нечетная по мощности)");
+        System.out.println("6. Сортировка вставками (четная-нечетная по году)");
+        System.out.println("7. Сортировка выбором (обычная)");
+        System.out.println("8. Сортировка выбором (четная-нечетная по мощности)");
+        System.out.println("9. Сортировка выбором (четная-нечетная по году)");
+        System.out.print("Ваш выбор: ");
+
+        String choice = scanner.nextLine().trim();
+
+        SortStrategy<Car> bubble = new BubbleSortStrategy<>();
+        SortStrategy<Car> insertion = new InsertionSortStrategy<>();
+        SortStrategy<Car> selection = new SelectionSortStrategy<>();
+
+        return switch (choice) {
+            case "1" -> bubble;
+            case "2" -> new OddEvenSortDecorator<>(bubble, Car::getPower, Car.BY_POWER);
+            case "3" -> new OddEvenSortDecorator<>(bubble, Car::getYear, Car.BY_YEAR);
+            case "4" -> insertion;
+            case "5" -> new OddEvenSortDecorator<>(insertion, Car::getPower, Car.BY_POWER);
+            case "6" -> new OddEvenSortDecorator<>(insertion, Car::getYear, Car.BY_YEAR);
+            case "7" -> selection;
+            case "8" -> new OddEvenSortDecorator<>(selection, Car::getPower, Car.BY_POWER);
+            case "9" -> new OddEvenSortDecorator<>(selection, Car::getYear, Car.BY_YEAR);
+            default -> throw new IllegalArgumentException("Некорректный алгоритм сортировки.");
+        };
+    }
+
+    private Comparator<Car> chooseComparator() {
+        System.out.println("\nВыберите поле для сортировки:");
+        System.out.println("1. По мощности (л.с.)");
+        System.out.println("2. По году выпуска");
         System.out.print("Ваш выбор: ");
 
         String choice = scanner.nextLine().trim();
 
         return switch (choice) {
-            case "1" -> null;
-            case "2" -> null;
-            case "3" -> null;
-            default -> throw new IllegalArgumentException("Некорректный алгоритм сортировки.");
+            case "1" -> Car.BY_POWER;
+            case "2" -> Car.BY_YEAR;
+            default -> throw new IllegalArgumentException("Некорректный выбор компаратора.");
         };
+    }
+
+    private String askYesNo(String message) {
+        System.out.print(message);
+        return scanner.nextLine().trim();
     }
 }

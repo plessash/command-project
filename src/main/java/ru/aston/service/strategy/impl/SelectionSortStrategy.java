@@ -17,7 +17,7 @@ public class SelectionSortStrategy<T> implements SortStrategy<T> {
                 }
             }
             if (minIndex != i) {
-                T temp = list.get(i);
+                T temp = list.get(i); 
                 list.set(i, list.get(minIndex));
                 list.set(minIndex, temp);
             }
