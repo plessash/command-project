@@ -1,0 +1,22 @@
+[
+  { "model": "Aurus Komendant", "power": 598, "year": 2023, "type": "Crossover", "country": "Russia" },
+  { "model": "Lada Granta Drive Active", "power": 106, "year": 2024, "type": "Sedan", "country": "Russia" },
+  { "model": "GAZ Volga Siber", "power": 143, "year": 2010, "type": "Sedan", "country": "Russia" },
+  { "model": "Moskvich 3e", "power": 193, "year": 2023, "type": "Crossover", "country": "Russia" },
+  { "model": "Shortcut (527 Edition)", "power": 184, "year": 2023, "type": "Sportscar", "country": "Russia" },
+  { "model": "Lucid Air Sapphire", "power": 1234, "year": 2024, "type": "Sedan", "country": "USA" },
+  { "model": "Cadillac Escalade-V", "power": 682, "year": 2023, "type": "Crossover", "country": "USA" },
+  { "model": "Ford GT", "power": 660, "year": 2022, "type": "Sportscar", "country": "USA" },
+  { "model": "Jeep Grand Cherokee Trackhawk", "power": 710, "year": 2021, "type": "Crossover", "country": "USA" },
+  { "model": "Lincoln Continental", "power": 400, "year": 2020, "type": "Sedan", "country": "USA" },
+  { "model": "Lexus LS 500", "power": 415, "year": 2023, "type": "Sedan", "country": "Japan" },
+  { "model": "Infiniti QX80", "power": 405, "year": 2024, "type": "Crossover", "country": "Japan" },
+  { "model": "Mazda RX-8", "power": 231, "year": 2012, "type": "Sportscar", "country": "Japan" },
+  { "model": "Mitsubishi Lancer Evolution X", "power": 295, "year": 2015, "type": "Sedan", "country": "Japan" },
+  { "model": "Toyota Century SUV", "power": 412, "year": 2024, "type": "Crossover", "country": "Japan" },
+  { "model": "Audi S8", "power": 571, "year": 2023, "type": "Sedan", "country": "Germany" },
+  { "model": "BMW XM Label Red", "power": 748, "year": 2024, "type": "Crossover", "country": "Germany" },
+  { "model": "Mercedes-AMG SL 63", "power": 585, "year": 2023, "type": "Sportscar", "country": "Germany" },
+  { "model": "Porsche Taycan Turbo S", "power": 761, "year": 2022, "type": "Sedan", "country": "Germany" },
+  { "model": "Opel Insignia OPC", "power": 325, "year": 2017, "type": "Sedan", "country": "Germany" }
+]
