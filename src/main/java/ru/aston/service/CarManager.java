@@ -4,6 +4,7 @@ import ru.aston.model.Car;
 import ru.aston.service.strategy.CarFillStrategy;
 import ru.aston.service.strategy.SortStrategy;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,7 +33,8 @@ public class CarManager {
         if (sortStrategy == null) {
             throw new IllegalStateException("Стратегия сортировки не выбрана!");
         }
-        sortStrategy.sort(cars, comparator);
+        List<Car> modifiableCars = new ArrayList<>(cars);
+        sortStrategy.sort(modifiableCars, comparator);
     }
 
     public void saveCarsToFile(String path, Iterable<Car> cars) {
