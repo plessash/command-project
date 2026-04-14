@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileFillStrategy implements CarFillStrategy {
     private final Gson gson = new Gson();
@@ -59,7 +60,7 @@ public class FileFillStrategy implements CarFillStrategy {
                             .power(raw.power)
                             .year(raw.year)
                             .build())
-                    .toList();
+                    .collect(Collectors.toCollection(ArrayList::new));
         } catch (IOException | JsonSyntaxException e) {
             System.err.println("Ошибка чтения/обработки файла: " + e.getMessage());
             return new ArrayList<>();
